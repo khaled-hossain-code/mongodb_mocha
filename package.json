@@ -1,0 +1,17 @@
+{
+  "name": "mongodb_users",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "Khaled Hossain <md.khaled.eee@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mocha": "5.2.0",
+    "mongoose": "5.4.0",
+    "nodemon": "1.18.9"
+  }
+}
