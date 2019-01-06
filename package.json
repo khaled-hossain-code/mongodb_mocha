@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "nodemon --exec 'mocha'"
   },
   "keywords": [],
   "author": "Khaled Hossain <md.khaled.eee@gmail.com>",
