@@ -96,4 +96,62 @@ describe('Delete user from db', () => {
     assert(user === null);
 
   });
-})
+});
+
+describe('Updating reords', () => {
+  let joe;
+
+  beforeEach(async () => {
+    joe = new User({
+      name: 'joe'
+    });
+
+    await joe.save();
+  });
+
+  it('model instance set n save', async () => {
+    joe.set('name', 'alex');
+    await joe.save();
+
+    const users = await User.find({});
+
+    assert(users.length === 1);
+    assert(users[0].name === 'alex')
+  });
+
+  it('A model instance can update', async () => {
+    await joe.updateOne({
+      name: 'alex'
+    });
+
+    const users = await User.find({});
+
+    assert(users.length === 1);
+    assert(users[0].name === 'alex')
+  });
+
+  it('A model class can update', async () => {
+    await User.updateOne({
+      name: 'joe'
+    }, {
+      name: 'alex'
+    });
+
+    const users = await User.find({});
+
+    assert(users.length === 1);
+    assert(users[0].name === 'alex')
+  });
+
+  it('A model class can update by ID', async () => {
+    await User.findByIdAndUpdate( joe._id, {
+      name: 'alex'
+    });
+
+    const users = await User.find({});
+
+    assert(users.length === 1);
+    assert(users[0].name === 'alex')
+  });
+
+});
