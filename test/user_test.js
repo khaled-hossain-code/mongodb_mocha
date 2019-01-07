@@ -17,7 +17,7 @@ describe('Reading users from db', () => {
 
   beforeEach(async () => {
     joe = new User({
-      name: 'Joe'
+      name: 'joe'
     });
 
     await joe.save();
@@ -29,9 +29,71 @@ describe('Reading users from db', () => {
 
   it('finds all users with a name of joe', async () => {
     const users = await User.find({
-      name: 'Joe'
+      name: 'joe'
     });
 
     assert(users.length > 0);
-  })
+  });
+
+  it('find a user with a particular id', async () => {
+    const user = await User.findById(joe._id);
+
+    assert(user.name === joe.name);
+  });
+});
+
+describe('Delete user from db', () => {
+  let joe;
+
+  beforeEach(async () => {
+    joe = new User({
+      name: 'joe'
+    });
+
+    await joe.save();
+  });
+
+  it('model instance remove', async () => {
+    await joe.remove();
+    const user = await User.findOne({
+      name: 'joe'
+    });
+
+    assert(user === null);
+  });
+
+  it('class method deleteOne', async () => {
+    await User.deleteOne({
+      name: 'joe'
+    });
+
+    const user = await User.findOne({
+      name: 'joe'
+    });
+
+    assert(user === null);
+  });
+
+  it('class method findAndDelete', async () => {
+    await User.findOneAndDelete({
+      name: 'joe'
+    });
+
+    const user = await User.findOne({
+      name: 'joe'
+    });
+
+    assert(user === null);
+  });
+
+  it('class method findByIdAndRemove', async () => {
+    await User.findByIdAndDelete(joe._id);
+
+    const user = await User.findOne({
+      name: 'joe'
+    });
+
+    assert(user === null);
+
+  });
 })
