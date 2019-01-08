@@ -103,7 +103,8 @@ describe('Updating reords', () => {
 
   beforeEach(async () => {
     joe = new User({
-      name: 'joe'
+      name: 'joe',
+      postCount: 0
     });
 
     await joe.save();
@@ -154,4 +155,14 @@ describe('Updating reords', () => {
     assert(users[0].name === 'alex')
   });
 
+  it('A user can have their postcount incremented by 1', async () => {
+    await User.update({ name: 'joe'}, { $inc: { postCount: 1}});
+
+    const user = await User.findOne({ name: 'joe'});
+
+    assert(user.postCount === 1);
+  });
+
 });
+
+
