@@ -132,7 +132,7 @@ describe('Updating reords', () => {
   });
 
   it('A model class can update', async () => {
-    await User.updateOne({
+    await User.findOneAndUpdate({
       name: 'joe'
     }, {
       name: 'alex'
@@ -145,24 +145,61 @@ describe('Updating reords', () => {
   });
 
   it('A model class can update by ID', async () => {
-    await User.findByIdAndUpdate( joe._id, {
+    await User.findByIdAndUpdate(joe._id, {
       name: 'alex'
     });
 
     const users = await User.find({});
 
     assert(users.length === 1);
-    assert(users[0].name === 'alex')
+    assert(users[0].name === 'alex');
   });
 
   it('A user can have their postcount incremented by 1', async () => {
-    await User.update({ name: 'joe'}, { $inc: { postCount: 1}});
+    await User.updateMany({
+      name: 'joe'
+    }, {
+      $inc: {
+        postCount: 1
+      }
+    });
 
-    const user = await User.findOne({ name: 'joe'});
+    const user = await User.findOne({
+      name: 'joe'
+    });
 
     assert(user.postCount === 1);
   });
 
 });
 
+describe('Validating User model', () => {
+  it('requires a user name', () => {
+    const user = new User({
+      name: undefined
+    });
+    const error = user.validateSync();
+    assert(error.errors['name'].message === 'Name is required.');
+  });
 
+  it('requires a user\'s name longer than 2 characters', () => {
+    const user = new User({
+      name: 'Al'
+    });
+    const error = user.validateSync();
+    assert(error.errors['name'].message === 'Name must be longer than 2 characters')
+  });
+
+  it('disallow invalid records from being save', async () => {
+    const user = new User({
+      name: 'Al',
+      postCount: 0
+    });
+
+    try {
+      await user.save();
+    } catch (error) {
+      assert(error.errors['name'].message === 'Name must be longer than 2 characters')
+    }
+  });
+});
