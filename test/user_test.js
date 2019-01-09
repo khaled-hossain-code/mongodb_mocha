@@ -1,5 +1,5 @@
 const assert = require('assert');
-const User = require('../src/user');
+const User = require('../src/userModel');
 
 describe('Creating records', () => {
   it('saves a user', async () => {
@@ -201,5 +201,55 @@ describe('Validating User model', () => {
     } catch (error) {
       assert(error.errors['name'].message === 'Name must be longer than 2 characters')
     }
+  });
+});
+
+describe('Posts Subdocument', () => {
+  it('can create a subdocument', async () => {
+    const joe = new User({
+      name: 'joe',
+      posts: [{
+        title: 'PostTitle'
+      }]
+    });
+
+    const user = await joe.save();
+
+    assert(user.posts.length === 1);
+    assert(user.posts[0].title === 'PostTitle');
+  });
+
+  it('can create post in existing user', async () => {
+    const joe = new User({
+      name: 'joe',
+      posts: []
+    });
+
+    const user = await joe.save();
+
+    user.posts.push({
+      title: 'PostTitle'
+    });
+
+    const savedUser = await user.save();
+
+    assert(savedUser.posts.length === 1);
+    assert(savedUser.posts[0].title === 'PostTitle');
+  });
+
+  it('can remove an existing subdocument', async () => {
+    const joe = new User({
+      name: 'joe',
+      posts: [{
+        title: 'PostTitle'
+      }]
+    });
+
+    const user = await joe.save();
+    const post = user.posts[0];
+    post.remove();
+    const savedUser = await user.save();
+
+    assert(savedUser.posts.length === 0);
   });
 });
