@@ -155,7 +155,7 @@ describe('Updating reords', () => {
     assert(users[0].name === 'alex');
   });
 
-  it('A user can have their postcount incremented by 1', async () => {
+  xit('A user can have their postcount incremented by 1', async () => {
     await User.updateMany({
       name: 'joe'
     }, {
@@ -251,5 +251,19 @@ describe('Posts Subdocument', () => {
     const savedUser = await user.save();
 
     assert(savedUser.posts.length === 0);
+  });
+});
+
+describe('Virtual property postCount', () => {
+  it('should return one', async () => {
+    const joe = new User({
+      name: 'joe',
+      posts: [{
+        title: 'PostTitle'
+      }]
+    });
+
+    const user = await joe.save();
+    assert(user.postCount === 1);
   });
 });
