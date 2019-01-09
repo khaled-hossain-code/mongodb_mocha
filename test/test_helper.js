@@ -14,8 +14,11 @@ before((done) => {
 
 // Run before each test
 beforeEach(async () => {
+  const { users, comments, blog_posts } = mongoose.connection.collections; 
   try {
-    await mongoose.connection.collections.users.drop();
+    await users.drop();
+    await comments.drop();
+    await blog_posts.drop();
   } catch (err) {
     console.error(err);
   }

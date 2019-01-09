@@ -12,10 +12,14 @@ const UserSchema = new Schema({
     }
   },
   likes: Number,
-  posts: [PostSchema]
+  posts: [PostSchema], //this is subdocumenting not reference
+  blogPosts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'blog_post'
+  }]
 });
 
-UserSchema.virtual('postCount').get(function() {
+UserSchema.virtual('postCount').get(function () {
   return this.posts.length;
 })
 
