@@ -104,7 +104,7 @@ describe('Updating reords', () => {
   beforeEach(async () => {
     joe = new User({
       name: 'joe',
-      postCount: 0
+      likes: 0
     });
 
     await joe.save();
@@ -155,12 +155,12 @@ describe('Updating reords', () => {
     assert(users[0].name === 'alex');
   });
 
-  xit('A user can have their postcount incremented by 1', async () => {
+  it('A user can have their likes incremented by 1', async () => {
     await User.updateMany({
       name: 'joe'
     }, {
       $inc: {
-        postCount: 1
+        likes: 1
       }
     });
 
@@ -168,7 +168,7 @@ describe('Updating reords', () => {
       name: 'joe'
     });
 
-    assert(user.postCount === 1);
+    assert(user.likes === 1);
   });
 
 });
