@@ -23,10 +23,6 @@ describe('Reading users from db', () => {
     await joe.save();
   });
 
-  afterEach(() => {
-
-  })
-
   it('finds all users with a name of joe', async () => {
     const users = await User.find({
       name: 'joe'
@@ -265,5 +261,22 @@ describe('Virtual property postCount', () => {
 
     const user = await joe.save();
     assert(user.postCount === 1);
+  });
+});
+
+describe('Reading users from db with skip and limit', () => {
+
+  beforeEach(async () => {
+    const joe = new User({ name: 'joe'});
+    const doe = new User({ name: 'doe'});
+    const poe = new User({ name: 'poe'});
+    const coe = new User({ name: 'coe'});
+
+    await  Promise.all([joe.save(),doe.save(),poe.save(),coe.save()]);
+  });
+
+  it('can skip and limit the result set', async () => {
+    const users = await User.find({}).skip(1).limit(2);
+    assert(users.length === 2);
   });
 });
