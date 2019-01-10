@@ -3,7 +3,7 @@ const User = require('../src/userModel');
 const Comment = require('../src/commentModel');
 const BlogPost = require('../src/blogPostModel');
 
-describe.only('Assoiations', () => {
+describe('Assoiations', () => {
   let joe, blogPost, comment;
 
   beforeEach(async () => {
